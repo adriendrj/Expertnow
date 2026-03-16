@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExpertNow — Le bon expert, en 20 minutes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #16161f;
+    --border: rgba(255,255,255,0.07);
+    --accent: #5b6ef5;
+    --accent2: #8b5cf6;
+    --accent-glow: rgba(91,110,245,0.25);
+    --text: #f0f0f5;
+    --muted: #7070a0;
+    --tag-bg: rgba(91,110,245,0.12);
+    --tag-color: #8b9fff;
+    --green: #34d399;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .logo span { color: var(--accent); }
+
+  nav ul {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  nav ul a:hover { color: var(--text); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(91,110,245,0.18) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
+    top: 30%;
+    right: 15%;
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--tag-bg);
+    border: 1px solid rgba(91,110,245,0.2);
+    color: var(--tag-color);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(44px, 7vw, 80px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    max-width: 860px;
+    margin: 0 auto 24px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 40px;
+    font-weight: 300;
+    line-height: 1.7;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 30px var(--accent-glow);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px var(--accent-glow);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.04);
+  }
+
+  /* STATS */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 64px;
+    margin-top: 80px;
+    padding-top: 48px;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.6s 0.4s ease both;
+    flex-wrap: wrap;
+  }
+
+  .stat-item { text-align: center; }
+
+  .stat-number {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -1px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* HOW IT WORKS */
+  .how {
+    padding: 100px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 60px;
+    max-width: 560px;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+    background: var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .step {
+    background: var(--surface);
+    padding: 36px 32px;
+    transition: background 0.2s;
+  }
+
+  .step:hover { background: var(--surface2); }
+
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  .step-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  .step h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .step p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* CATEGORIES */
+  .categories-section {
+    padding: 100px 48px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .categories-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 60px;
+  }
+
+  .cat-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .cat-pill:hover, .cat-pill.active {
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--tag-bg);
+  }
+
+  .cat-pill span:first-child { font-size: 22px; }
+
+  /* EXPERTS GRID */
+  .experts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .expert-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .expert-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent-glow), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .expert-card:hover {
+    border-color: rgba(91,110,245,0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  .expert-card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .card-meta { flex: 1; }
+
+  .card-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .card-bio {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .tag {
+    background: var(--tag-bg);
+    color: var(--tag-color);
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .price {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .price span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .availability {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 500;
+  }
+
+  .avail-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  .book-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .book-btn:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  .stars {
+    color: #f59e0b;
+    font-size: 12px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .stars span { color: var(--muted); font-size: 11px; }
+
+  /* CTA SECTION */
+  .cta-section {
+    padding: 100px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(91,110,245,0.15) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    max-width: 700px;
+    margin: 0 auto 20px;
+  }
+
+  .cta-section p {
+    color: var(--muted);
+    font-size: 17px;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  footer .logo { font-size: 16px; }
+
+  footer p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .modal-close:hover { color: var(--text); }
+
+  .modal h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .modal-subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .modal-slots {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .slot {
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text);
+    text-align: center;
+  }
+
+  .slot:hover, .slot.selected {
+    border-color: var(--accent);
+    background: var(--tag-bg);
+    color: var(--tag-color);
+  }
+
+  .slot-time { font-weight: 600; font-family: 'Syne', sans-serif; }
+  .slot-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .modal-confirm {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .modal-confirm:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  .modal-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .modal-price-row strong {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    color: var(--text);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Expert<span>Now</span></a>
+  <ul>
+    <li><a href="#experts">Experts</a></li>
+    <li><a href="#how">Comment ça marche</a></li>
+    <li><a href="#">Devenir expert</a></li>
+  </ul>
+  <a href="#experts" class="nav-cta">Trouver un expert →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div>
+    <div class="badge">
+      <div class="badge-dot"></div>
+      Premiers experts disponibles dès maintenant
+    </div>
+    <h1>Le bon expert.<br><em>En 20 minutes.</em></h1>
+    <p>Des appels courts avec des professionnels seniors qui ont déjà résolu votre problème. Pas de cabinet, pas de mission longue. Une vraie conversation.</p>
+    <div class="hero-actions">
+      <a href="#experts" class="btn-primary">Explorer les experts</a>
+      <a href="#how" class="btn-secondary">Comment ça marche</a>
+    </div>
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-number">120+</div>
+        <div class="stat-label">Experts vérifiés</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">7 cat.</div>
+        <div class="stat-label">Domaines couverts</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">20 min</div>
+        <div class="stat-label">Format standard</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">48h</div>
+        <div class="stat-label">Délai moyen</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-label">Processus</div>
+  <h2 class="section-title">De la question à la réponse, en 4 étapes.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon">✍️</div>
+      <h3>Décrivez votre problème</h3>
+      <p>Recrutement, levée de fonds, stratégie commerciale... Soyez précis, l'expert se prépare avant l'appel.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon">🎯</div>
+      <h3>Choisissez votre expert</h3>
+      <p>Parcourez les profils, lisez les avis, consultez leurs expériences. Vous choisissez.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon">📞</div>
+      <h3>Appelez, échangez</h3>
+      <p>20 à 30 minutes d'appel direct. Pas de PowerPoint. Un vrai échange, d'humain à humain.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-icon">📝</div>
+      <h3>Recevez votre compte-rendu</h3>
+      <p>Un résumé structuré et un plan d'action généré par IA dans les minutes qui suivent.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOGUE -->
+<section class="categories-section" id="experts">
+  <div class="categories-inner">
+    <div class="section-label">Experts</div>
+    <h2 class="section-title">Trouvez l'expertise qu'il vous faut.</h2>
+
+    <div class="cat-grid">
+      <div class="cat-pill active" onclick="filterCat('all', this)">
+        <span>⚡</span><span>Tous</span>
+      </div>
+      <div class="cat-pill" onclick="filterCat('rh', this)">
+        <span>👥</span><span>RH</span>
+      </div>
+      <div class="cat-pill" onclick="filterCat('sales', this)">
+        <span>📈</span><span>Sales & Marketing</span>
+      </div>
+      <div class="cat-pill" onclick="filterCat('product', this)">
+        <span>🎨</span><span>Product</span>
+      </div>
+      <div class="cat-pill" onclick="filterCat('tech', this)">
+        <span>💻</span><span>Tech</span>
+      </div>
+      <div class="cat-pill" onclick="filterCat('skills', this)">
+        <span>🧠</span><span>Skills</span>
+      </div>
+      <div class="cat-pill" onclick="filterCat('production', this)">
+        <span>🏭</span><span>Production</span>
+      </div>
+      <div class="cat-pill" onclick="filterCat('funding', this)">
+        <span>💰</span><span>Funding</span>
+      </div>
+    </div>
+
+    <div class="experts-grid" id="expertsGrid"></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <h2>Votre prochain bon conseil est à 20 minutes.</h2>
+  <p>Rejoignez les entrepreneurs qui ne devinent plus, ils demandent.</p>
+  <a href="#experts" class="btn-primary">Trouver mon expert →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="logo">Expert<span>Now</span></a>
+  <p>© 2025 ExpertNow — Paris, France</p>
+  <p style="color: var(--muted); font-size: 13px;">CGU · Confidentialité · Devenir expert</p>
+</footer>
+
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3 id="modalName">Réserver un appel</h3>
+    <p class="modal-subtitle" id="modalTitle">Choisissez un créneau disponible</p>
+    <div class="modal-slots">
+      <div class="slot" onclick="selectSlot(this)">
+        <div class="slot-time">Lun. 10h00</div>
+        <div class="slot-date">23 juin 2025</div>
+      </div>
+      <div class="slot" onclick="selectSlot(this)">
+        <div class="slot-time">Lun. 14h30</div>
+        <div class="slot-date">23 juin 2025</div>
+      </div>
+      <div class="slot" onclick="selectSlot(this)">
+        <div class="slot-time">Mar. 09h00</div>
+        <div class="slot-date">24 juin 2025</div>
+      </div>
+      <div class="slot" onclick="selectSlot(this)">
+        <div class="slot-time">Mer. 11h00</div>
+        <div class="slot-date">25 juin 2025</div>
+      </div>
+    </div>
+    <div class="modal-price-row">
+      <span>Session 20 min</span>
+      <strong id="modalPrice">–</strong>
+    </div>
+    <button class="modal-confirm">Confirmer et payer →</button>
+  </div>
+</div>
+
+<script>
+const experts = [
+  {
+    name: "Sophie Marchand",
+    title: "Ex-DRH Groupe · L'Oréal, Danone",
+    bio: "15 ans à construire des équipes de direction dans le luxe et l'agroalimentaire. Je vous aide à recruter, structurer et fidéliser vos talents clés.",
+    tags: ["Recrutement cadres", "Culture d'entreprise", "Onboarding"],
+    price: "90€",
+    cat: "rh",
+    color: "#1a1a3e",
+    accent: "#5b6ef5",
+    emoji: "SM",
+    rating: "4.9",
+    reviews: 34,
+    available: true
+  },
+  {
+    name: "Marc Lefebvre",
+    title: "Ex-Directeur Commercial · BtoB SaaS",
+    bio: "J'ai scalé 3 équipes sales de 0 à 50 personnes. Stratégie go-to-market, structuration des cycles de vente, closing grands comptes.",
+    tags: ["Sales BtoB", "Go-to-market", "Grands comptes"],
+    price: "110€",
+    cat: "sales",
+    color: "#1a2e1a",
+    accent: "#34d399",
+    emoji: "ML",
+    rating: "5.0",
+    reviews: 21,
+    available: true
+  },
+  {
+    name: "Camille Durand",
+    title: "Ex-Associée · Fonds de VC early stage",
+    bio: "Ancienne investisseuse, je vous aide à préparer votre pitch, comprendre les attentes des VCs et structurer votre term sheet.",
+    tags: ["Levée de fonds", "Pitch deck", "VC"],
+    price: "150€",
+    cat: "funding",
+    color: "#2e1a1a",
+    accent: "#f59e0b",
+    emoji: "CD",
+    rating: "4.8",
+    reviews: 47,
+    available: true
+  },
+  {
+    name: "Thomas Vidal",
+    title: "Ex-CTO · 2 exits tech réussis",
+    bio: "De la stack technique à l'architecture produit, je réponds à vos questions tech sans jargon inutile. Idéal pour founders non-techniques.",
+    tags: ["Architecture tech", "Choix stack", "CTO as a service"],
+    price: "130€",
+    cat: "tech",
+    color: "#1a2a2e",
+    accent: "#38bdf8",
+    emoji: "TV",
+    rating: "4.9",
+    reviews: 28,
+    available: false
+  },
+  {
+    name: "Inès Bouchard",
+    title: "Brand & Product Designer · 12 ans",
+    bio: "Ex-lead designer chez plusieurs scale-ups françaises. Identité de marque, UX, design system — je vous donne un regard honnête sur votre produit.",
+    tags: ["Identité visuelle", "UX Review", "Design system"],
+    price: "95€",
+    cat: "product",
+    color: "#2a1a2e",
+    accent: "#a78bfa",
+    emoji: "IB",
+    rating: "4.7",
+    reviews: 19,
+    available: true
+  },
+  {
+    name: "Julien Morin",
+    title: "Ex-Directeur Marketing · E-commerce & Retail",
+    bio: "SEO, acquisition, email marketing, stratégie de contenu. J'ai généré plus de 10M€ de CA via des canaux digitaux pour des marques retail et DTC.",
+    tags: ["SEO", "Email marketing", "Acquisition"],
+    price: "85€",
+    cat: "sales",
+    color: "#1a2e28",
+    accent: "#6ee7b7",
+    emoji: "JM",
+    rating: "4.8",
+    reviews: 56,
+    available: true
+  },
+  {
+    name: "Nathalie Perrin",
+    title: "Executive Coach · Leadership & Management",
+    bio: "Ancienne DG, aujourd'hui coach certifiée. Je travaille avec des dirigeants et managers en transition pour développer leur style de leadership.",
+    tags: ["Leadership", "Management", "Prise de parole"],
+    price: "120€",
+    cat: "skills",
+    color: "#2e2a1a",
+    accent: "#fbbf24",
+    emoji: "NP",
+    rating: "5.0",
+    reviews: 38,
+    available: true
+  },
+  {
+    name: "Antoine Garnier",
+    title: "Ex-Directeur des Achats · Industrie",
+    bio: "20 ans dans la supply chain et les achats industriels. Négociation fournisseurs, certifications ISO, sourcing international, restructuration production.",
+    tags: ["Achats", "Supply chain", "Certifications"],
+    price: "100€",
+    cat: "production",
+    color: "#1e1e2e",
+    accent: "#818cf8",
+    emoji: "AG",
+    rating: "4.6",
+    reviews: 12,
+    available: true
+  }
+];
+
+let currentCat = 'all';
+
+function renderExperts(cat) {
+  const grid = document.getElementById('expertsGrid');
+  const filtered = cat === 'all' ? experts : experts.filter(e => e.cat === cat);
+  
+  grid.innerHTML = filtered.map(e => `
+    <div class="expert-card" onclick="openModal('${e.name}', '${e.title}', '${e.price}')">
+      <div class="card-top">
+        <div class="avatar" style="background:${e.color}; color:${e.accent}">${e.emoji}</div>
+        <div class="card-meta">
+          <div class="card-name">${e.name}</div>
+          <div class="card-title">${e.title}</div>
+          <div class="stars">★★★★★ <span>${e.rating} (${e.reviews} avis)</span></div>
+        </div>
+      </div>
+      <p class="card-bio">${e.bio}</p>
+      <div class="card-tags">${e.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+      <div class="card-footer">
+        <div>
+          <div class="price">${e.price} <span>/ 20 min</span></div>
+          ${e.available
+            ? `<div class="availability"><div class="avail-dot"></div>Disponible cette semaine</div>`
+            : `<div class="availability" style="color:var(--muted)"><div class="avail-dot" style="background:var(--muted)"></div>Complet</div>`
+          }
+        </div>
+        <button class="book-btn" onclick="event.stopPropagation(); openModal('${e.name}', '${e.title}', '${e.price}')">Réserver →</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterCat(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderExperts(cat);
+}
+
+function openModal(name, title, price) {
+  document.getElementById('modalName').textContent = name;
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalPrice').textContent = price;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+}
+
+function selectSlot(el) {
+  document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+renderExperts('all');
+</script>
+</body>
+</html>
